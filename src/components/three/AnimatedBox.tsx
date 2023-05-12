@@ -1,9 +1,20 @@
-import { useRef } from "react";
+import { MutableRefObject, useRef } from "react";
 import { useFrame } from "@react-three/fiber";
+import { useHelper } from "@react-three/drei";
+import { BoxHelper, Object3D } from "three";
 
-const AnimatedBox = () => {
-  // uesRef로 직접 지정. TRHEE.Mesh로 Geometry + textrue를 줄 수 있는 Mesh타입으로 지정함
+type Props = {
+  isTesting: boolean;
+};
+
+const AnimatedBox: React.FC<Props> = ({ isTesting }: Props) => {
   const meshRef = useRef<THREE.Mesh>(null);
+
+  useHelper(
+    isTesting ? (meshRef as MutableRefObject<Object3D>) : null,
+    BoxHelper,
+    "blue"
+  );
 
   useFrame(() => {
     console.log("useFrame..");
@@ -14,9 +25,9 @@ const AnimatedBox = () => {
   });
 
   return (
-    <mesh ref={meshRef} scale={[1.5, 1.5, 0.5]}>
-      {/* Geometry 형태 */}
-      <boxGeometry args={[2, 2, 2]} attach={"geometry"} />
+    <mesh ref={meshRef} scale={[0.5, 0.5, 0.5]}>
+      {/* 육면체의 geometry */}
+      <boxGeometry />
       <meshStandardMaterial />
     </mesh>
   );
